@@ -1,0 +1,45 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "companyName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the company you're deploying for"
+            }
+        },
+        "environment": {
+            "type": "string",
+            "allowedValues": ["dev","test","acc","prod"],
+            "metadata": {
+                "description": "The short name of the environment that you're deploying"
+            }
+        },
+        "resourceTypeAbbreviation": {
+            "type": "string",
+            "allowedValues": [
+                "adf",
+                "dl",
+                "kv",
+                "sa",
+                "bricks"
+            ],
+            "metadata": {
+                "description": "The resource type you're deploying"
+            }
+        },
+        "instanceNumber": {
+            "type": "int",
+            "defaultValue": "1",
+            "metadata": {
+                "description": "The instance number of the resource that will be used as a suffix"
+            }
+        }
+    },
+    "outputs": {
+        "resourceName": {
+            "type": "string",
+            "value": "[concat(toLower(parameters('companyName')), toLower(parameters('resourceType')), toLower(parameters('environment')), padLeft(string(parameters('instanceNumber'))), 2, '0'))]"
+        }
+    }
+}

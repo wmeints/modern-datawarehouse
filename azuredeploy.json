@@ -2,74 +2,133 @@
     "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
     "contentVersion": "1.0.0.1",
     "parameters": {
-        "resourceGroupName": {
+        "companyName": {
             "type": "string",
             "metadata": {
-                "description": "The name of the resource group to create"
+                "description": "The name of the company"
+            }
+        },
+        "environment": {
+            "type": "string",
+            "allowedValues": ["dev","test","acc","prod"],
+            "metadata": {
+                "description": "The name of the environment"
             }
         },
         "location": {
             "type": "string",
-            "metadata":{ 
-                "description": "The data center location of the resources"
+            "metadata": {
+                "description": "The location where the resources should be deployed"
             }
         },
-        "workspaceName": {
+        "templateBaseUri": {
             "type": "string",
+            "defaultValue": "https://raw.githubusercontent.com/wmeints/modern-datawarehouse/master/",
             "metadata": {
-                "description": "The name of the workspace that is created"
+                "description": "The GIT repository the templates are stored in"
             }
         }
     },
     "variables": {
-
+        "resourceGroupName": "[concat(toLower(parameters('companyName')),'-dwh-', toLower(parameters('environment')))]",
+        "namingConventionTemplate": "[concat(parameters('templateBaseUri'), 'shared/naming-convention.json')]",
+        "dataFactoryTemplate": "[concat(parameters('templateBaseUri'), 'resources/data-factory.json')]",
+        "databricksWorkspaceTemplate": "[concat(parameters('templateBaseUri'), 'resources/databricks-workspace.json')]"
     },
     "resources": [
         {
             "type": "Microsoft.Resources/resourceGroups",
             "apiVersion": "2018-05-01",
             "location": "[parameters('location')]",
-            "name": "[parameters('resourceGroupName')]"
+            "name": "[variables('resourceGroupName')]"
         },
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-05-01",
             "name": "analyticsDeployment",
-            "resourceGroup": "[parameters('resourceGroupName')]",
+            "resourceGroup": "[variables('resourceGroupName')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups/', parameters('resourceGroupName')]"
+                "[resourceId('Microsoft.Resources/resourceGroups/', variables('resourceGroupName'))]"
             ],
             "properties":{
                 "mode": "Incremental",
                 "template": {
-                    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
                     "contentVersion": "1.0.0.0",
                     "parameters": {},
-                    "variables": {
-                        "managedResourceGroupId": "[concat('databricks-rg-', parameters('workspaceName'), '-', uniqueString(parameters('workspaceName'), resourceGroup().id))]"
-                    },
+                    "variables": {},
                     "resources": [
                         {
-                            "apiVersion": "2018-06-01",
-                            "name": "[concat(parameters('prefix'),'-adf001')]",
-                            "location": "[resourceGroup().location]",
-                            "type": "Microsoft.DataFactory/factories",
-                            "identity": {
-                                "type": "SystemAssigned"
+                            "name": "dataFactoryName",
+                            "apiVersion": "2017-05-10",
+                            "type": "Microsoft.Resources/deployments",
+                            "properties": {
+                                "templateLink": {
+                                    "uri": "[variables('namingConventionTemplate')]",
+                                    "contentVersion": "1.0.0.0"
+                                }
+                            },
+                            "parameters": {
+                                "companyName": {
+                                    "value": "[parameters('companyName')]"
+                                },
+                                "resourceTypeAbbreviation": {
+                                    "value": "adf"
+                                },
+                                "environment": {
+                                    "value": "[parameters('environment')]"
+                                }
                             }
                         },
                         {
-                            "apiVersion": "2018-04-01",
-                            "location": "[resourceGroup().location]",
-                            "name": "[parameters('workspaceName')]",
-                            "sku": {
-                                "name": "standard"
-                            },
-                            "comments": "Please do not use an existing resource group for ManagedResourceGroupId.",
+                            "name": "databricksWorkspaceName",
+                            "apiVersion": "2017-05-10",
+                            "type": "Microsoft.Resources/deployments",
                             "properties": {
-                                "ManagedResourceGroupId": "[variables('managedResourceGroupId')]"
+                                "templateLink": {
+                                    "uri": "[variables('namingConventionTemplate')]",
+                                    "contentVersion": "1.0.0.0"
+                                }
                             },
-                            "type": "Microsoft.Databricks/workspaces"
+                            "parameters": {
+                                "companyName": {
+                                    "value": "[parameters('companyName')]"
+                                },
+                                "resourceTypeAbbreviation": {
+                                    "value": "bricks"
+                                },
+                                "environment": {
+                                    "value": "[parameters('environment')]"
+                                }
+                            }
+                        },
+                        {
+                            "name": "dataFactoryTemplate",
+                            "type": "Microsoft.Resources/deployments",
+                            "properties": {
+                                "mode": "Incremental",
+                                "templateLink": {
+                                    "uri": "[variables('dataFactoryTemplate')]",
+                                    "contentVersion": "1.0.0.0"
+                                },
+                                "parameters": {
+                                    "dataFactoryName": "[reference('dataFactoryName').outputs.resourceName.value]"
+                                }
+                            }
+                        },
+                        {
+                            "name": "databricksTemplate",
+                            "type": "Microsoft.Resources/deployments",
+                            "properties": {
+                                "mode": "Incremental",
+                                "templateLink": {
+                                    "uri": "[variables('databricksWorkspaceTemplate')]",
+                                    "contentVersion": "1.0.0.0"
+                                },
+                                "parameters": {
+                                    "workspaceName": "[reference('databricksWorkspaceName').outputs.resourceName.value]"
+                                }
+                            }
                         }
                     ]
                 }
