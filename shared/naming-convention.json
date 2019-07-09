@@ -36,6 +36,7 @@
             }
         }
     },
+    "resources": [],
     "outputs": {
         "resourceName": {
             "type": "string",

@@ -46,6 +46,7 @@
             "name": "dataFactoryName",
             "apiVersion": "2018-05-01",
             "type": "Microsoft.Resources/deployments",
+            "location": "[parameters('location')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -69,6 +70,7 @@
             "name": "databricksWorkspaceName",
             "apiVersion": "2018-05-01",
             "type": "Microsoft.Resources/deployments",
+            "location": "[parameters('location')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -101,8 +103,6 @@
                 "template": {
                     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
                     "contentVersion": "1.0.0.0",
-                    "parameters": {},
-                    "variables": {},
                     "resources": [
                         {
                             "name": "dataFactoryTemplate",
@@ -114,7 +114,8 @@
                                     "contentVersion": "1.0.0.0"
                                 },
                                 "parameters": {
-                                    "dataFactoryName": "[reference('dataFactoryName').outputs.resourceName.value]"
+                                    "dataFactoryName": "[reference('dataFactoryName').outputs.resourceName.value]",
+                                    "location": "[resourceGroup().location]"
                                 }
                             }
                         },
@@ -128,7 +129,8 @@
                                     "contentVersion": "1.0.0.0"
                                 },
                                 "parameters": {
-                                    "workspaceName": "[reference('databricksWorkspaceName').outputs.resourceName.value]"
+                                    "workspaceName": "[reference('databricksWorkspaceName').outputs.resourceName.value]",
+                                    "location": "[resourceGroup().location]"
                                 }
                             }
                         }
