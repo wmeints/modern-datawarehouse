@@ -30,7 +30,7 @@
         },
         "instanceNumber": {
             "type": "int",
-            "defaultValue": "1",
+            "defaultValue": 1,
             "metadata": {
                 "description": "The instance number of the resource that will be used as a suffix"
             }
@@ -40,7 +40,7 @@
     "outputs": {
         "resourceName": {
             "type": "string",
-            "value": "[concat(toLower(parameters('companyName')), toLower(parameters('resourceType')), toLower(parameters('environment')), padLeft(string(parameters('instanceNumber'))), 2, '0'))]"
+            "value": "[concat(toLower(parameters('companyName')), toLower(parameters('resourceType')), toLower(parameters('environment')), padLeft(string(parameters('instanceNumber')),2,'0'))]"
         }
     }
 }
