@@ -1,0 +1,79 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.1",
+    "parameters": {
+        "resourceGroupName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the resource group to create"
+            }
+        },
+        "location": {
+            "type": "string",
+            "metadata":{ 
+                "description": "The data center location of the resources"
+            }
+        },
+        "workspaceName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the workspace that is created"
+            }
+        }
+    },
+    "variables": {
+
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2018-05-01",
+            "location": "[parameters('location')]",
+            "name": "[parameters('resourceGroupName')]"
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "name": "analyticsDeployment",
+            "resourceGroup": "[parameters('resourceGroupName')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups/', parameters('resourceGroupName')]"
+            ],
+            "properties":{
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {
+                        "managedResourceGroupId": "[concat('databricks-rg-', parameters('workspaceName'), '-', uniqueString(parameters('workspaceName'), resourceGroup().id))]"
+                    },
+                    "resources": [
+                        {
+                            "apiVersion": "2018-06-01",
+                            "name": "[concat(parameters('prefix'),'-adf001')]",
+                            "location": "[resourceGroup().location]",
+                            "type": "Microsoft.DataFactory/factories",
+                            "identity": {
+                                "type": "SystemAssigned"
+                            }
+                        },
+                        {
+                            "apiVersion": "2018-04-01",
+                            "location": "[resourceGroup().location]",
+                            "name": "[parameters('workspaceName')]",
+                            "sku": {
+                                "name": "standard"
+                            },
+                            "comments": "Please do not use an existing resource group for ManagedResourceGroupId.",
+                            "properties": {
+                                "ManagedResourceGroupId": "[variables('managedResourceGroupId')]"
+                            },
+                            "type": "Microsoft.Databricks/workspaces"
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}
