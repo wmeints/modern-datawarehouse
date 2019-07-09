@@ -43,6 +43,52 @@
             "name": "[variables('resourceGroupName')]"
         },
         {
+            "name": "dataFactoryName",
+            "apiVersion": "2018-05-01",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('namingConventionTemplate')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "companyName": {
+                        "value": "[parameters('companyName')]"
+                    },
+                    "resourceTypeAbbreviation": {
+                        "value": "adf"
+                    },
+                    "environment": {
+                        "value": "[parameters('environment')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "databricksWorkspaceName",
+            "apiVersion": "2018-05-01",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('namingConventionTemplate')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "companyName": {
+                        "value": "[parameters('companyName')]"
+                    },
+                    "resourceTypeAbbreviation": {
+                        "value": "bricks"
+                    },
+                    "environment": {
+                        "value": "[parameters('environment')]"
+                    }
+                }
+            }
+        },
+        {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-05-01",
             "name": "analyticsDeployment",
@@ -58,50 +104,6 @@
                     "parameters": {},
                     "variables": {},
                     "resources": [
-                        {
-                            "name": "dataFactoryName",
-                            "apiVersion": "2017-05-10",
-                            "type": "Microsoft.Resources/deployments",
-                            "properties": {
-                                "templateLink": {
-                                    "uri": "[variables('namingConventionTemplate')]",
-                                    "contentVersion": "1.0.0.0"
-                                }
-                            },
-                            "parameters": {
-                                "companyName": {
-                                    "value": "[parameters('companyName')]"
-                                },
-                                "resourceTypeAbbreviation": {
-                                    "value": "adf"
-                                },
-                                "environment": {
-                                    "value": "[parameters('environment')]"
-                                }
-                            }
-                        },
-                        {
-                            "name": "databricksWorkspaceName",
-                            "apiVersion": "2017-05-10",
-                            "type": "Microsoft.Resources/deployments",
-                            "properties": {
-                                "templateLink": {
-                                    "uri": "[variables('namingConventionTemplate')]",
-                                    "contentVersion": "1.0.0.0"
-                                }
-                            },
-                            "parameters": {
-                                "companyName": {
-                                    "value": "[parameters('companyName')]"
-                                },
-                                "resourceTypeAbbreviation": {
-                                    "value": "bricks"
-                                },
-                                "environment": {
-                                    "value": "[parameters('environment')]"
-                                }
-                            }
-                        },
                         {
                             "name": "dataFactoryTemplate",
                             "type": "Microsoft.Resources/deployments",
