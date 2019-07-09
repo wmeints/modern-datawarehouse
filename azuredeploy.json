@@ -10,7 +10,12 @@
         },
         "environment": {
             "type": "string",
-            "allowedValues": ["dev","test","acc","prod"],
+            "allowedValues": [
+                "dev",
+                "test",
+                "acc",
+                "prod"
+            ],
             "metadata": {
                 "description": "The name of the environment"
             }
@@ -37,16 +42,9 @@
     },
     "resources": [
         {
-            "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2018-05-01",
-            "location": "[parameters('location')]",
-            "name": "[variables('resourceGroupName')]"
-        },
-        {
             "name": "dataFactoryName",
             "apiVersion": "2018-05-01",
             "type": "Microsoft.Resources/deployments",
-            "location": "[parameters('location')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -70,7 +68,6 @@
             "name": "databricksWorkspaceName",
             "apiVersion": "2018-05-01",
             "type": "Microsoft.Resources/deployments",
-            "location": "[parameters('location')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -91,60 +88,42 @@
             }
         },
         {
+            "name": "dataFactoryTemplate",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-05-01",
-            "name": "analyticsDeployment",
-            "resourceGroup": "[variables('resourceGroupName')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups/', variables('resourceGroupName'))]"
-            ],
-            "properties":{
+            "properties": {
                 "mode": "Incremental",
-                "template": {
-                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-                    "contentVersion": "1.0.0.0",
-                    "resources": [
-                        {
-                            "name": "dataFactoryTemplate",
-                            "type": "Microsoft.Resources/deployments",
-                            "apiVersion": "2018-05-01",
-                            "properties": {
-                                "mode": "Incremental",
-                                "templateLink": {
-                                    "uri": "[variables('dataFactoryTemplate')]",
-                                    "contentVersion": "1.0.0.0"
-                                },
-                                "parameters": {
-                                    "dataFactoryName": {
-                                        "value": "[reference('dataFactoryName').outputs.resourceName.value]"
-                                    },
-                                    "location": {
-                                        "value": "[parameters('location')]"
-                                    }
-                                }
-                            }
-                        },
-                        {
-                            "name": "databricksTemplate",
-                            "type": "Microsoft.Resources/deployments",
-                            "apiVersion": "2018-05-01",
-                            "properties": {
-                                "mode": "Incremental",
-                                "templateLink": {
-                                    "uri": "[variables('databricksWorkspaceTemplate')]",
-                                    "contentVersion": "1.0.0.0"
-                                },
-                                "parameters": {
-                                    "workspaceName": {
-                                        "value": "[reference('databricksWorkspaceName').outputs.resourceName.value]",
-                                    },
-                                    "location": {
-                                        "value": "[parameters('location')]"
-                                    }
-                                }
-                            }
-                        }
-                    ]
+                "templateLink": {
+                    "uri": "[variables('dataFactoryTemplate')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "dataFactoryName": {
+                        "value": "[reference('dataFactoryName').outputs.resourceName.value]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "databricksTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('databricksWorkspaceTemplate')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "workspaceName": {
+                        "value": "[reference('databricksWorkspaceName').outputs.resourceName.value]",
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    }
                 }
             }
         }

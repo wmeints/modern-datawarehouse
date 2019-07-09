@@ -36,12 +36,8 @@ First, clone the repository to disk and modify the `parameters.json` file so it 
 Then, using the following command, deploy the resources to azure:
 
 ```
-az deployment create --parameters @parameters.json --template-file azuredeploy.json
+az group create <resource-group-name>
+az group deployment create -g <resource-group-name> --parameters @parameters.json --template-uri https://raw.githubusercontent.com/wmeints/modern-datawarehouse/master/azuredeploy.json
 ```
 
-Alternatively, you can reference the template directly in this repository using the following command:
-
-```
-az deployment create --parameters @parameters.json --template-uri https://raw.githubusercontent.com/wmeints/modern-datawarehouse/master/azuredeploy.json
-```
-
+Replace the resource group name with the name of the resource group you want to deploy to.
