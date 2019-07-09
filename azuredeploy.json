@@ -51,7 +51,7 @@
                 "mode": "Incremental",
                 "templateLink": {
                     "uri": "[variables('namingConventionTemplate')]",
-                    "contentVersion": "1.0.0.0"
+                    "contentVersion": "1.0.1.0"
                 },
                 "parameters": {
                     "companyName": {
@@ -75,7 +75,7 @@
                 "mode": "Incremental",
                 "templateLink": {
                     "uri": "[variables('namingConventionTemplate')]",
-                    "contentVersion": "1.0.0.0"
+                    "contentVersion": "1.0.1.0"
                 },
                 "parameters": {
                     "companyName": {
