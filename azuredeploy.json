@@ -107,6 +107,7 @@
                         {
                             "name": "dataFactoryTemplate",
                             "type": "Microsoft.Resources/deployments",
+                            "apiVersion": "2018-05-01",
                             "properties": {
                                 "mode": "Incremental",
                                 "templateLink": {
@@ -114,14 +115,19 @@
                                     "contentVersion": "1.0.0.0"
                                 },
                                 "parameters": {
-                                    "dataFactoryName": "[reference('dataFactoryName').outputs.resourceName.value]",
-                                    "location": "[resourceGroup().location]"
+                                    "dataFactoryName": {
+                                        "value": "[reference('dataFactoryName').outputs.resourceName.value]"
+                                    },
+                                    "location": {
+                                        "value": "[parameters('location')]"
+                                    }
                                 }
                             }
                         },
                         {
                             "name": "databricksTemplate",
                             "type": "Microsoft.Resources/deployments",
+                            "apiVersion": "2018-05-01",
                             "properties": {
                                 "mode": "Incremental",
                                 "templateLink": {
@@ -129,8 +135,12 @@
                                     "contentVersion": "1.0.0.0"
                                 },
                                 "parameters": {
-                                    "workspaceName": "[reference('databricksWorkspaceName').outputs.resourceName.value]",
-                                    "location": "[resourceGroup().location]"
+                                    "workspaceName": {
+                                        "value": "[reference('databricksWorkspaceName').outputs.resourceName.value]",
+                                    },
+                                    "location": {
+                                        "value": "[parameters('location')]"
+                                    }
                                 }
                             }
                         }
