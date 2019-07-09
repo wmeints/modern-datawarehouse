@@ -2,14 +2,14 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "workspaceName": {
-            "value": "databricks001"
+        "companyName": {
+            "value": "<Insert your companyname here>"
+        },
+        "environment": {
+            "value": "dev"
         },
         "location": {
-            "value": "northeurope"
-        },
-        "resourceGroupName": {
-            "value": "datalake-analytics"
+            "value": "westeurope"
         }
     }
 }
