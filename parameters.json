@@ -7,9 +7,6 @@
         },
         "environment": {
             "value": "dev"
-        },
-        "location": {
-            "value": "westeurope"
         }
     }
 }
