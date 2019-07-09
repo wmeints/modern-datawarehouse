@@ -20,12 +20,6 @@
                 "description": "The name of the environment"
             }
         },
-        "location": {
-            "type": "string",
-            "metadata": {
-                "description": "The location where the resources should be deployed"
-            }
-        },
         "templateBaseUri": {
             "type": "string",
             "defaultValue": "https://raw.githubusercontent.com/wmeints/modern-datawarehouse/master/",
@@ -100,9 +94,6 @@
                 "parameters": {
                     "dataFactoryName": {
                         "value": "[reference('dataFactoryName').outputs.resourceName.value]"
-                    },
-                    "location": {
-                        "value": "[parameters('location')]"
                     }
                 }
             }
@@ -120,9 +111,6 @@
                 "parameters": {
                     "workspaceName": {
                         "value": "[reference('databricksWorkspaceName').outputs.resourceName.value]",
-                    },
-                    "location": {
-                        "value": "[parameters('location')]"
                     }
                 }
             }
