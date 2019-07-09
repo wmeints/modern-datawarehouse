@@ -41,6 +41,6 @@ az deployment create --parameters @parameters.json --template-file azuredeploy.j
 Alternatively, you can reference the template directly in this repository using the following command:
 
 ```
-az deployment create --parameters @parameters.json --template-uri https://...wefwegerg.
+az deployment create --parameters @parameters.json --template-uri https://raw.githubusercontent.com/wmeints/modern-datawarehouse/master/azuredeploy.json
 ```
 
