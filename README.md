@@ -1,10 +1,5 @@
 # Modern data warehouse resource manager templates
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fwmeints%2Fmodern-datawarehouse%2Fmaster%2Fazuredeploy.json" target="_blank">
-    <img src="http://azuredeploy.net/deploybutton.png"/>
-</a>
-<a href="http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2Fwmeints%2Fmodern-datawarehouse%2Fmaster%2Fazuredeploy.json" target="_blank">
-    <img src="http://armviz.io/visualizebutton.png"/>
-</a>
+[![Deploy to Azure](https://azuredeploy.net/deploybutton.svg)](https://azuredeploy.net/)
 
 This repository contains a set of resource manager templates to quickly deploy a modern data warehouse to Azure.
 Please note that these templates are here for demonstration purposes. You have to design the layout 
