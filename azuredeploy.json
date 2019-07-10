@@ -30,9 +30,10 @@
     },
     "variables": {
         "resourceGroupName": "[concat(toLower(parameters('companyName')),'-dwh-', toLower(parameters('environment')))]",
-        "namingConventionTemplate": "[concat(parameters('templateBaseUri'), 'shared/naming-convention.json')]",
-        "dataFactoryTemplate": "[concat(parameters('templateBaseUri'), 'resources/data-factory.json')]",
-        "databricksWorkspaceTemplate": "[concat(parameters('templateBaseUri'), 'resources/databricks-workspace.json')]"
+        "namingConventionTemplateFile": "[concat(parameters('templateBaseUri'), 'shared/naming-convention.json')]",
+        "dataFactoryTemplateFile": "[concat(parameters('templateBaseUri'), 'resources/data-factory.json')]",
+        "databricksWorkspaceTemplateFile": "[concat(parameters('templateBaseUri'), 'resources/databricks-workspace.json')]",
+        "dataLakeTemplateFile": "[concat(parameters('templateBaseUri'), 'resources/data-lake.json')]"
     },
     "resources": [
         {
@@ -42,7 +43,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('namingConventionTemplate')]",
+                    "uri": "[variables('namingConventionTemplateFile')]",
                     "contentVersion": "1.0.1.0"
                 },
                 "parameters": {
@@ -65,7 +66,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('namingConventionTemplate')]",
+                    "uri": "[variables('namingConventionTemplateFile')]",
                     "contentVersion": "1.0.1.0"
                 },
                 "parameters": {
@@ -88,7 +89,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('namingConventionTemplate')]",
+                    "uri": "[variables('namingConventionTemplateFile')]",
                     "contentVersion": "1.0.1.0"
                 },
                 "parameters": {
@@ -111,7 +112,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('dataFactoryTemplate')]",
+                    "uri": "[variables('dataFactoryTemplateFile')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -128,7 +129,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('databricksWorkspaceTemplate')]",
+                    "uri": "[variables('databricksWorkspaceTemplateFile')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -139,18 +140,18 @@
             }
         },
         {
-            "name": "datalakeTemplate",
+            "name": "dataLakeTemplate",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-05-01",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('datalakeTemplate')]",
+                    "uri": "[variables('dataLakeTemplateFile')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
                     "workspaceName": {
-                        "value": "[reference('storageAccountName').outputs.resourceName.value]",
+                        "value": "[reference('storageAccountName').outputs.resourceName.value]"
                     }
                 }
             }
