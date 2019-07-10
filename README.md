@@ -1,9 +1,9 @@
 # Modern data warehouse resource manager templates
 This repository contains a set of resource manager templates to quickly deploy a modern data warehouse to Azure.
 Please note that these templates are here for demonstration purposes. You have to design the layout 
-of your data lake and configure the permissions for each component yourself. The default set up is safe, but might not fit your company.
+of your data lake and configure the user permissions for each component yourself. 
 
-Interesting in learning more about setting up a modern data warehouse? [Contact Info Support](ai@infosupport.com)!
+Interested in learning more about setting up a modern data warehouse? [Contact Info Support](ai@infosupport.com)!
 
 ## Deploying the data warehouse
 Follow the instructions to deploy the resources to Azure.
@@ -30,8 +30,25 @@ az account set --subscription <subscription-id>
 
 ### Deploying the resources
 Now that you've logged in, you can deploy the templates to production.
-First, clone the repository to disk and modify the `parameters.json` file so it matches your situation.
-Then, using the following command, deploy the resources to azure:
+First, create a new file `parameters.json` and copy the following content to the file:
+
+```
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "companyName": {
+            "value": "<Insert your companyname here>"
+        },
+        "environment": {
+            "value": "dev"
+        }
+    }
+}
+```
+
+Then, modify the contents of the parameter values to fit your needs.
+After creating the parameters file, use the following command to deploy the resources to azure:
 
 ```
 az group create <resource-group-name>
