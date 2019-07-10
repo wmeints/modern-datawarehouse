@@ -82,6 +82,29 @@
             }
         },
         {
+            "name": "storageAccountName",
+            "apiVersion": "2018-05-01",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('namingConventionTemplate')]",
+                    "contentVersion": "1.0.1.0"
+                },
+                "parameters": {
+                    "companyName": {
+                        "value": "[parameters('companyName')]"
+                    },
+                    "resourceTypeAbbreviation": {
+                        "value": "sa"
+                    },
+                    "environment": {
+                        "value": "[parameters('environment')]"
+                    }
+                }
+            }
+        },
+        {
             "name": "dataFactoryTemplate",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-05-01",
@@ -111,6 +134,23 @@
                 "parameters": {
                     "workspaceName": {
                         "value": "[reference('databricksWorkspaceName').outputs.resourceName.value]",
+                    }
+                }
+            }
+        },
+        {
+            "name": "datalakeTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('datalakeTemplate')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "workspaceName": {
+                        "value": "[reference('storageAccountName').outputs.resourceName.value]",
                     }
                 }
             }

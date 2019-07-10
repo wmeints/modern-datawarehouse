@@ -1,6 +1,4 @@
 # Modern data warehouse resource manager templates
-[![Deploy to Azure](https://azuredeploy.net/deploybutton.svg)](https://azuredeploy.net/)
-
 This repository contains a set of resource manager templates to quickly deploy a modern data warehouse to Azure.
 Please note that these templates are here for demonstration purposes. You have to design the layout 
 of your data lake and configure the permissions for each component yourself. The default set up is safe, but might not fit your company.
