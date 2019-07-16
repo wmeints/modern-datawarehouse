@@ -51,7 +51,7 @@ Then, modify the contents of the parameter values to fit your needs.
 After creating the parameters file, use the following command to deploy the resources to azure:
 
 ```
-az group create <resource-group-name>
+az group create -n <resource-group-name> -l <location>
 az group deployment create -g <resource-group-name> --parameters @parameters.json --template-uri https://raw.githubusercontent.com/wmeints/modern-datawarehouse/master/azuredeploy.json
 ```
 
